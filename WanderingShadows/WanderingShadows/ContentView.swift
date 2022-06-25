@@ -8,9 +8,50 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
+    @StateObject var motions = Motions()
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        VStack(spacing: 50) {
+            Text("Rotate the device in any direction!")
+                .font(.title2.bold())
+                .shadow(color: .gray, radius: 1, x: motions.x, y: motions.y)
+            
+            ZStack {
+                Group {
+                    Image(systemName: "bubble.left.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.red.opacity(0.8))
+         
+
+                    Image(systemName: "bubble.left")
+                        .resizable()
+                        .scaledToFit()
+                        .shadow(color: .black.opacity(0.6), radius: 3, x: motions.x, y: motions.y)
+                }
+                .frame(width: 300, height: 300, alignment: .center)
+
+                Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200, height: 100, alignment: .center)
+                    .offset(x: 0, y: -25)
+                    .shadow(color: .black.opacity(0.6), radius: 3, x: motions.x, y: motions.y)
+            }
+        }
+        .rotation3DEffect(.degrees(motions.xRot), axis: (x: 0, y: 1, z: 0))
+        .rotation3DEffect(.degrees(motions.yRot), axis: (x: 1, y: 0, z: 0))
+        .onReceive(motions.timer) { _ in
+            motions.updateShadows()
+        }
+        .onChange(of: scenePhase) { phase in
+            if phase != .active {
+                motions.stopMotions()
+            } else {
+                motions.startMotions()
+            }
+        }
     }
 }
 
