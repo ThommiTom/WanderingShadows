@@ -22,7 +22,7 @@ struct ContentView: View {
                     Image(systemName: "bubble.left.fill")
                         .resizable()
                         .scaledToFit()
-                        .foregroundColor(.red.opacity(0.8))
+                        .foregroundColor(.blue.opacity(0.8))
          
 
                     Image(systemName: "bubble.left")
