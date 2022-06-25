@@ -13,9 +13,10 @@ class Motions: ObservableObject {
     @Published var y: Double = 0.0
     @Published var xRot: Double = 0.0
     @Published var yRot: Double = 0.0
+    @Published var isTimerRunning = true
     
     private let motion = CMMotionManager()
-    let timer = Timer.publish(every: (1.0 / 60.0), on: .main, in: .common).autoconnect()
+    var timer = Timer.publish(every: (1.0 / 60.0), on: .main, in: .common).autoconnect()
     
     init() {
         print("Motions.init")
@@ -38,6 +39,16 @@ class Motions: ObservableObject {
         if motion.isDeviceMotionAvailable && motion.isDeviceMotionActive {
             motion.stopDeviceMotionUpdates()
         }
+    }
+    
+    func restartTimer() {
+        timer = Timer.publish(every: (1.0 / 60.0), on: .main, in: .common).autoconnect()
+        isTimerRunning = true
+    }
+    
+    func stopTimer() {
+        timer.upstream.connect().cancel()
+        isTimerRunning = false
     }
     
     func updateShadows() {

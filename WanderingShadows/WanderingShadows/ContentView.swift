@@ -39,6 +39,18 @@ struct ContentView: View {
                     .offset(x: 0, y: -25)
                     .shadow(color: .black.opacity(0.6), radius: 3, x: motions.x, y: motions.y)
             }
+            
+            Text(motions.isTimerRunning ? "Stop Timer" : "Restart Timer")
+                .padding()
+                .foregroundStyle(.white)
+                .font(.title)
+                .background(motions.isTimerRunning ? .red : .green)
+                .clipShape(RoundedRectangle(cornerRadius: 15))
+                .contentShape(RoundedRectangle(cornerRadius: 15))
+                .onTapGesture {
+                    motions.isTimerRunning ? motions.stopTimer() : motions.restartTimer()
+                }
+                .shadow(color: .gray, radius: 3, x: motions.x, y: motions.y)
         }
         .rotation3DEffect(.degrees(motions.xRot), axis: (x: 0, y: 1, z: 0))
         .rotation3DEffect(.degrees(motions.yRot), axis: (x: 1, y: 0, z: 0))
